@@ -1,0 +1,52 @@
+worker_processes 1;
+
+error_log  /usr/local/nginx-1.7.12/logs/error.log crit;
+
+pid        /usr/local/nginx-1.7.12/logs/nginx.pid;
+
+events {
+    worker_connections  64;
+}
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    #charset  gb2312;
+     
+    server_names_hash_bucket_size 128;
+    client_header_buffer_size 32k;
+    large_client_header_buffers 4 32k;
+     
+    keepalive_timeout 60;
+
+    fastcgi_connect_timeout 300;
+    fastcgi_send_timeout 300;
+    fastcgi_read_timeout 300;
+    fastcgi_buffer_size 128k;
+    fastcgi_buffers 4 128k;
+    fastcgi_busy_buffers_size 128k;
+    fastcgi_temp_file_write_size 128k;
+    client_body_temp_path /usr/local/nginx-1.7.12/client_body_temp;
+    proxy_temp_path /usr/local/nginx-1.7.12/proxy_temp;
+    fastcgi_temp_path /usr/local/nginx-1.7.12/fastcgi_temp;
+
+    gzip on;
+    gzip_min_length  1k;
+    gzip_buffers     4 16k;
+    gzip_http_version 1.0;
+    gzip_comp_level 2;
+    gzip_types       text/plain application/x-javascript text/css application/xml;
+    gzip_vary on;
+
+    client_header_timeout  3m;
+    client_body_timeout    3m;
+    send_timeout          3m;
+    sendfile                on;
+    tcp_nopush              on;
+    tcp_nodelay            on;
+    #设定虚拟主机
+    include       /usr/local/nginx-1.7.12/conf/vhost/art.io.conf;
+    include       /usr/local/nginx-1.7.12/conf/vhost/phpmyadmin.conf;
+}
+
